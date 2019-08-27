@@ -9,7 +9,7 @@ class CreateThumbnailsTable extends Migration {
 	{
 		Schema::create('thumbnails', function(Blueprint $table) {
 			$table->increments('id');
-			$table->string('Image_name', 255);
+			$table->string('image_name', 255);
 			$table->string('alt',255);
 			$table->timestamps();
 		});

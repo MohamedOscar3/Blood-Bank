@@ -1,6 +1,7 @@
 <?php
 
 use App\BloodType;
+use App\Config;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\Resource;
 use Illuminate\Support\Facades\Route;
@@ -24,6 +25,8 @@ Route::prefix('v1')->namespace('api\v1')->name('api.v1.')->group(function () {
     Route::get('city/{id}','CityController@index')->name('city');
 
 
+    
+
     //get bloodTypes
     Route::Get('blood_types',function () {
         return responseJson('1','all blood types',BloodType::select('type_name')->get());
@@ -37,6 +40,10 @@ Route::prefix('v1')->namespace('api\v1')->name('api.v1.')->group(function () {
     Route::Post('login','ClientController@login')->name('login');
 
     // make the routes for all the things that reqire login 
+
+    //ask for password reset
+    Route::post('reset','ClientController@reset')->name('reset');
+    Route::post('passwordreset','ClientController@resetPass')->name('password_reset');
 
     Route::middleware('auth:api')->group(function () {
         // get cataigory 
@@ -76,7 +83,12 @@ Route::prefix('v1')->namespace('api\v1')->name('api.v1.')->group(function () {
           //send all unreading notification 
           Route::get('unreading','NotificationController@count_unreading');
         
-        
+            //send a massage to admin
+           Route::post('message','MassageController@store');
+
+           Route::get('config',function () {
+               return responseJson('1',"the data of the app to contact",Config::find(1));
+           });
             
             
         

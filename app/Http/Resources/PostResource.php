@@ -19,7 +19,7 @@ class PostResource extends JsonResource
         return [
             'id' => $this->id,
             'title' => $this->title,
-            'tumbnail_link' => $this->thumbnail->path,
+            'tumbnail_link' => $this->thumbnail->image_name,
             
             'is_favorite' => $this->is_the_post_fav() ?? 0,
 

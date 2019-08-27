@@ -11,6 +11,7 @@ use App\Http\Resources\DonationResource;
 use App\Client;
 
 use App\Governorate;
+
 use App\Notification;
 use App\Token;
 use Illuminate\Database\Eloquent\Builder;
@@ -64,6 +65,7 @@ class DonationController extends Controller
         
         $donation = Donation::create($validateDonation);
         
+     
         // create notification
         $notification = Notification::create(['title' => "حالة تبرع في محافظة " . $donation->governorate->governorate_name,
         'donation_id' => $donation->id,

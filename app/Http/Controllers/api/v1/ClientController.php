@@ -3,14 +3,18 @@
 namespace App\Http\Controllers\api\v1;
 
 use App\Client;
+use App\client_password_resets;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ClientRequest;
 use App\Http\Requests\LoginRequest;
 use App\Http\Resources\ClientResource;
+use App\Mail\ClientReset;
 use App\Token as AppToken;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
 use Psy\Util\Str;
 use Symfony\Component\CssSelector\Parser\Token;
 
@@ -103,12 +107,69 @@ class ClientController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param  string  $email
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, $email)
     {
         //
+    }
+    
+
+    public function reset(Request $request) {
+        $validator = \Validator::make($request->all(), [
+            'email' => 'required'
+            
+        ]);
+
+        if ($validator->fails()) {
+            return responseJson('0','the email is requierd');
+        }
+
+        $client = Client::where('email',$request->email)->first();
+        if ($client) {
+            client_password_resets::where('email',$request->email)->delete();
+            $token = client_password_resets::create(['email'=>$request->email,'token'=>\Str::random(6),
+            'created_at'=>Carbon::parse(Carbon::now(),'Africa/Cairo')]);
+
+            Mail::to($request->email)->send(
+                new ClientReset($token)
+            );
+
+            
+            
+        }
+
+        return responseJson('1','the email is sended if you are sign up before you will find it in your inbox');
+    }
+
+    public function resetPass(Request $request) {
+        $validator = \Validator::make($request->all(), [
+            'email' => 'required',
+            'token' => 'required',
+            'password'=> 'required|confirmed'
+            
+        ]);
+
+        if ($validator->fails()) {
+            return responseJson('0','your token is incorrect or password');
+        }
+
+        $confirm = client_password_resets::where('token',$request->token)->first();
+        
+        if ($confirm) {
+            
+            if(Carbon::parse(Carbon::now(),'Africa/Cairo')->diffInMinutes($confirm->created_at) > 1) {
+                return responseJson('0','time out');
+            } else {
+                $client = Client::where('email',$request->email)->first();
+                
+                $client->password = Hash::make($request->password);
+                $client->save();
+                $confirm = client_password_resets::where('token',$request->token)->delete();
+                return responseJson('1','Your Password Changed Successfuly');
+            }
+        }
     }
 
     

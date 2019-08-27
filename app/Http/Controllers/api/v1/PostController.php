@@ -56,7 +56,9 @@ class PostController extends Controller
         //
         $post = Post::find($id);
         if ($post->id) {
-            return responseJson(1,$post->title,(new PostResource($post))->additional(['data' => ['content' => $post->content]]));
+            
+            return responseJson(1,"Post",[new PostResource($post),['content'=>$post->content]]);
+            
         }
         
         
