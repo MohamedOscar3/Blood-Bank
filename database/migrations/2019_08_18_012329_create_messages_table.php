@@ -15,6 +15,7 @@ class CreateMessagesTable extends Migration {
 			$table->string('title', 255);
 			$table->text('content');
 			$table->unsignedInteger('client_id')->index();
+			$table->integer('is_read')->default(0);
 			$table->timestamps();
 		});
 	}

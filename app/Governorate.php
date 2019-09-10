@@ -11,5 +11,5 @@ class Governorate extends Model
         return $this->morphToMany('App\Client','clientables');
     }
 
-    protected $fillable = ['title'];
+    protected $fillable = ['governorate_name'];
 }

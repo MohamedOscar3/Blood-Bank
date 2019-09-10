@@ -1,0 +1,37 @@
+#page_content_ {
+    min-height: 100vh;
+}
+
+#profile_picture {
+    position: relative;
+}
+
+.fa-camera {
+    font-size: 3vw;
+    position: absolute;
+    bottom:1vw;
+    right:2.5vw;
+    background-color:rgba(0,0,0,.5);
+    display:block;
+    padding:.2vw .5vw;
+    
+}
+
+#upoload_photo_form {
+    display:none;
+}
+#upload_image {
+    transition: all .5s ease-in-out;
+}
+
+#upload_image:hover{
+    background-color:white;
+    color:white;
+}
+
+
+.mce-notification-inner {display:none!important;}
+
+
+
+    

@@ -39,6 +39,7 @@ return [
         'web' => [
             'driver' => 'session',
             'provider' => 'users',
+            'table' => 'users'  
         ],
 
         'api' => [
@@ -69,6 +70,7 @@ return [
         'users' => [
             'driver' => 'eloquent',
             'model' => App\User::class,
+            'table' => 'users',
         ],
 
         'clients'=> [
